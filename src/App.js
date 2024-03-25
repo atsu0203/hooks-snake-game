@@ -9,6 +9,14 @@ const initialPosition = { x: 17, y: 17 }
 const initialValues = initFields(35, initialPosition)
   const defaultInterval = 100
 
+
+  const GameStatus = Object.freeze({
+    init: 'init',
+    playing: 'playing',
+    suspended: 'suspended',
+    gameover: 'gameover'
+  })
+  
   let timer = undefined
  
   const unsubscribe = () => {
@@ -21,6 +29,7 @@ const initialValues = initFields(35, initialPosition)
 function App() {
   const [fields, setFields] = useState(initialValues)
   const [position, setPosition] = useState()
+  const [status, setStatus] = useState(GameStatus.init)
 const [tick, setTick] = useState(0)
 
 
