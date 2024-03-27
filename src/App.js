@@ -46,11 +46,13 @@ const [tick, setTick] = useState(0)
   }, [])
 
   useEffect(() => {
-    if (!position) {
+    if (!position || status !== GameStatus.playing) {
       return
     }
     goUp()
   }, [tick])
+
+  const onStart = () => setStatus(GameStatus.playing)
 
 
   const goUp = () => {
@@ -78,7 +80,7 @@ const [tick, setTick] = useState(0)
       <button onClick={goUp}>進む</button>
       </div> */}
       <footer className="footer">
-         <Button />
+      <Button onStart={onStart} />
          <ManipulationPanel />
       </footer>
     </div>
