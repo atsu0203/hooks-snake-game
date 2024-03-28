@@ -17,6 +17,21 @@ const initialValues = initFields(35, initialPosition)
     gameover: 'gameover'
   })
   
+  const Direction = Object.freeze({
+    up: 'up',
+    right: 'right',
+    left: 'left',
+    down: 'down'
+  })
+
+  
+  const OppositeDirection = Object.freeze({
+    up: 'down',
+    right: 'left',
+    left: 'right',
+    down: 'up'
+  })
+
   let timer = undefined
  
   const unsubscribe = () => {
@@ -30,7 +45,8 @@ function App() {
   const [fields, setFields] = useState(initialValues)
   const [position, setPosition] = useState()
   const [status, setStatus] = useState(GameStatus.init)
-const [tick, setTick] = useState(0)
+  const [direction, setDirection] = useState(Direction.up)
+  const [tick, setTick] = useState(0)
 
 
   useEffect(() => {
@@ -42,6 +58,7 @@ const [tick, setTick] = useState(0)
       // }
       setTick(tick => tick + 1)
     }, defaultInterval)
+    setDirection(Direction.up)
     return unsubscribe
   }, [])
 
@@ -65,6 +82,16 @@ const [tick, setTick] = useState(0)
   }
 
 
+  const onChangeDirection = (newDirection) => {
+    if (status !== GameStatus.playing) {
+      return direction
+    }
+    if (OppositeDirection[direction] === newDirection) {
+      return
+    }
+    setDirection(newDirection)
+  }
+
   return (
     <div className="App">
       <header className="header">
@@ -81,7 +108,7 @@ const [tick, setTick] = useState(0)
       </div> */}
       <footer className="footer">
       <Button onStart={onStart} />
-         <ManipulationPanel />
+      <ManipulationPanel onChange={onChangeDirection} />
       </footer>
     </div>
   );
