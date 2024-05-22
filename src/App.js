@@ -1,4 +1,4 @@
-import React, {  useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Navigation from './components/Navigation';
 import Field from './components/Field';
 import Button from './components/Button';
@@ -24,6 +24,12 @@ const initialValues = initFields(35, initialPosition)
     down: 'down'
   })
 
+  const DirectionKeyCodeMap = Object.freeze({
+    37: Direction.left,
+    38: Direction.up,
+    39: Direction.right,
+    40: Direction.down,
+  })
   
   const OppositeDirection = Object.freeze({
     up: 'down',
@@ -61,9 +67,9 @@ function App() {
     setPosition(initialPosition)
      // ゲームの中の時間を管理する
     timer = setInterval(() => {
-      // if (!position) {
-      //   return
-      // }
+      if (!position) {
+        return
+      }
       setTick(tick => tick + 1)
     }, defaultInterval)
     setDirection(Direction.up)
@@ -74,13 +80,26 @@ function App() {
     if (!position || status !== GameStatus.playing) {
       return
     }
-    goUp()
+    const canContinue = handleMoving()
+    if (!canContinue) {
+      unsubscribe()
+      setStatus(GameStatus.gameover)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tick])
 
   const onStart = () => setStatus(GameStatus.playing)
 
+  const onRestart = () => {
+    timer = setInterval(() => {
+      setTick(tick => tick + 1)
+    }, defaultInterval)
+    setStatus(GameStatus.init)
+    setPosition(initialPosition)
+    setFields(initFields(35, initialPosition))
+  }
 
-  const goUp = () => {
+  const handleMoving = () => {
     const { x, y } = position
     const nextY = Math.max(y -1, 0)
     fields[y][x] = ''
@@ -90,7 +109,7 @@ function App() {
   }
 
 
-  const onChangeDirection = (newDirection) => {
+  const onChangeDirection = useCallback((newDirection) => {
     if (status !== GameStatus.playing) {
       return direction
     }
@@ -98,7 +117,20 @@ function App() {
       return
     }
     setDirection(newDirection)
-  }
+  }, [direction ,status, ])
+ 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      const newDirection = DirectionKeyCodeMap[e.keyCode];
+      if (!newDirection) {
+        return;
+      }
+
+      onChangeDirection(newDirection);
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [onChangeDirection])
 
   return (
     <div className="App">
@@ -111,11 +143,8 @@ function App() {
       <main className="main">
         <Field fields={fields} />
       </main>
-      {/* <div style={{ padding: '16px' }}>
-      <button onClick={goUp}>進む</button>
-      </div> */}
       <footer className="footer">
-      <Button onStart={onStart} />
+      <Button status={status} onStart={onStart} onRestart={onRestart}/>
       <ManipulationPanel onChange={onChangeDirection} />
       </footer>
     </div>
