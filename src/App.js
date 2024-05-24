@@ -5,7 +5,7 @@ import Button from "./components/Button";
 import ManipulationPanel from "./components/ManipulationPanel";
 import { initFields } from "./utils";
 
-const fieldSize = 35
+const fieldSize = 35;
 const initialPosition = { x: 17, y: 17 };
 const initialValues = initFields(fieldSize, initialPosition);
 const defaultInterval = 100;
@@ -41,12 +41,12 @@ const OppositeDirection = Object.freeze({
   down: "up",
 });
 
-// const Delta = Object.freeze({
-//   up: { x: 0, y: -1 },
-//   right: { x: 1, y: 0 },
-//   left: { x: -1, y: 0 },
-//   down: { x: 0, y: 1 },
-// });
+const Delta = Object.freeze({
+  up: { x: 0, y: -1 },
+  right: { x: 1, y: 0 },
+  left: { x: -1, y: 0 },
+  down: { x: 0, y: 1 },
+});
 
 let timer = undefined;
 
@@ -55,6 +55,18 @@ const unsubscribe = () => {
     return;
   }
   clearInterval(timer);
+};
+
+const isCollision = (fieldSize, position) => {
+  console.log(position.y);
+  console.log(position.x);
+  if (position.y < 0 || position.x < 0) {
+    return true;
+  }
+  if (position.y > fieldSize - 1 || position.x > fieldSize - 1) {
+    return true;
+  }
+  return false;
 };
 
 function App() {
@@ -69,9 +81,9 @@ function App() {
     setPosition(initialPosition);
     // ゲームの中の時間を管理する
     timer = setInterval(() => {
-      setTick(tick => tick + 1)
-    // }, interval)
-    // return unsubscribe
+      setTick((tick) => tick + 1);
+      // }, interval)
+      // return unsubscribe
       // if (!position) {
       //   return;
       // }
@@ -83,13 +95,17 @@ function App() {
 
   useEffect(() => {
     if (position === 0 || status !== GameStatus.playing) {
-      return
+      return;
     }
     const canContinue = handleMoving();
     if (!canContinue) {
-      // unsubscribe();
-      // setStatus(GameStatus.gameover);
+      setStatus(GameStatus.gameover);
     }
+    // const canContinue = handleMoving();
+    // if (!canContinue) {
+    // unsubscribe();
+    // setStatus(GameStatus.gameover);
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tick]);
 
@@ -100,17 +116,27 @@ function App() {
     }, defaultInterval);
     setStatus(GameStatus.init);
     setPosition(initialPosition);
-    setDirection(Direction.up)
+    setDirection(Direction.up);
     setFields(initFields(fields.length, initialPosition));
   };
 
   const handleMoving = () => {
     const { x, y } = position;
+    const delta = Delta[direction];
+    const newPosition = {
+      x: x + delta.x,
+      y: y + delta.y,
+    };
+    if (isCollision(fields.length, newPosition)) {
+      // unsubscribe();
+      return false;
+    }
     const nextY = Math.max(y - 1, 0);
     fields[y][x] = "";
-    fields[nextY][x] = "snake";
-    setPosition({ x, y: nextY });
+    fields[newPosition.y][newPosition.x] = 'snake'
+    setPosition(newPosition);
     setFields(fields);
+    return true;
   };
 
   const onChangeDirection = useCallback(
