@@ -96,11 +96,6 @@ function App() {
     if (!canContinue) {
       setStatus(GameStatus.gameover);
     }
-    // const canContinue = handleMoving();
-    // if (!canContinue) {
-    // unsubscribe();
-    // setStatus(GameStatus.gameover);
-    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tick]);
 
@@ -126,10 +121,9 @@ function App() {
       isCollision(fields.length, newPosition) ||
       isEatingMyself(fields, newPosition)
     ) {
-      // unsubscribe();
       return false;
     }
-    // const nextY = Math.max(y - 1, 0);
+
     const newBody = [...body];
     if (fields[newPosition.y][newPosition.x] !== "food") {
       const removingTrack = newBody.pop();
@@ -140,6 +134,7 @@ function App() {
     }
     fields[newPosition.y][newPosition.x] = "snake";
     newBody.unshift(newPosition);
+
     setBody(newBody);
     setFields(fields);
     return true;

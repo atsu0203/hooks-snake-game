@@ -17,10 +17,8 @@ export const initFields = (fieldSize, snake) => {
     fields.push(cols);
   }
 
-  fields[snake.y][snake.x] = "snake";
-
   const food = getFoodPosition(fieldSize, [snake])
   fields[food.y][food.x] = "food";
-
+ console.log(fields)
   return fields;
 };
