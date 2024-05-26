@@ -8,10 +8,20 @@ const ManipulationPanel = ({ onChange }) => {
 
   return (
     <div className="manipulation-panel">
-      <button onClick={onLeft}>←</button>
-      <button onClick={onUp}>↑</button>
-      <button onClick={onDown}>↓</button>
-      <button onClick={onRight}>→</button>
+      <button className="manipulation-btn btn btn-left" onClick={onLeft}>
+        ←
+      </button>
+      <div>
+        <button className="manipulation-btn btn btn-up" onClick={onUp}>
+          ↑
+        </button>
+        <button className="manipulation-btn btn btn-down" onClick={onDown}>
+          ↓
+        </button>
+      </div>
+      <button className="manipulation-btn btn btn-right" onClick={onRight}>
+        →
+      </button>
     </div>
   );
 };
