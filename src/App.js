@@ -9,9 +9,8 @@ const fieldSize = 35;
 const initialPosition = { x: 17, y: 17 };
 const initialValues = initFields(fieldSize, initialPosition);
 const defaultInterval = 100;
-
-// const defaultDifficulty = 3;
-// const Difficulty = [1000, 500, 100, 50, 10]
+const defaultDifficulty = 3;
+const Difficulty = [1000, 500, 100, 50, 10];
 
 const GameStatus = Object.freeze({
   init: "init",
@@ -77,16 +76,18 @@ function App() {
   const [status, setStatus] = useState(GameStatus.init);
   const [direction, setDirection] = useState(Direction.up);
   const [tick, setTick] = useState(0);
+  const [difficulty, setDifficulty] = useState(defaultDifficulty);
 
   useEffect(() => {
     setBody([initialPosition]);
     // ゲームの中の時間を管理する
+    const interval = Difficulty[difficulty - 1];
     timer = setInterval(() => {
       setTick((tick) => tick + 1);
-    }, defaultInterval);
+    }, interval);
     setDirection(Direction.up);
     return unsubscribe;
-  }, []);
+  }, [difficulty]);
 
   useEffect(() => {
     if (body.length === 0 || status !== GameStatus.playing) {
@@ -110,6 +111,20 @@ function App() {
     setFields(initFields(fields.length, initialPosition));
   };
   const onStop = () => setStatus(GameStatus.suspended);
+
+  const onChangeDifficulty = useCallback(
+    (difficulty) => {
+      if (status !== GameStatus.init) {
+        return;
+      }
+      if (difficulty < 1 || difficulty > Difficulty.length) {
+        return;
+      }
+      setDifficulty(difficulty);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [status, difficulty]
+  );
 
   const handleMoving = () => {
     const { x, y } = body[0];
@@ -173,7 +188,11 @@ function App() {
         <div className="title-container">
           <h1 className="title">Snake Game</h1>
         </div>
-        <Navigation length={body.length} />
+        <Navigation
+          length={body.length}
+          difficulty={difficulty}
+          onChangeDifficulty={onChangeDifficulty}
+        />
       </header>
       <main className="main">
         <Field fields={fields} />

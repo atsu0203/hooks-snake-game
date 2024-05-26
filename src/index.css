@@ -1,22 +1,22 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-    'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
-    'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -26,6 +26,11 @@ body {
 *:before,
 *:after {
   box-sizing: border-box;
+}
+
+
+.is-hidden {
+  visibility: hidden !important;
 }
 
 /* 要素が真ん中によるようにフレックスボックスを設定 */
@@ -40,7 +45,6 @@ body {
   height: 9px;
   width: 9px;
   background: #0f1d1d;
-
 }
 .field {
   display: flex;
@@ -48,7 +52,9 @@ body {
 }
 
 .App {
-  max-width: calc(9px * 35 + 1px * 2); /* a. (マスの幅) * 個数 + (ボーダーの幅) * 本数 */
+  max-width: calc(
+    9px * 35 + 1px * 2
+  ); /* a. (マスの幅) * 個数 + (ボーダーの幅) * 本数 */
   text-align: center;
 }
 
@@ -75,4 +81,63 @@ body {
   padding: 16px;
   display: flex;
   align-items: center;
+}
+.navigation-item-number-container {
+  display: flex;
+  padding: 0 8px;
+  align-items: center;
+  margin-left: 8px;
+}
+
+.num-board {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #0f1d1d;
+  height: 48px;
+  width: 24px;
+}
+
+.difficulty-number {
+  margin-right: 8px;
+}
+
+.difficulty-button {
+  cursor: pointer;
+  width: 8px;
+  height: 8px;
+  border: 8px solid #0f1d1d;
+  margin: 8px;
+}
+
+.difficulty-button-container {
+  background: #0f1d1d;
+}
+
+.difficulty-up {
+  margin-top: 4px;
+  border-bottom: 8px solid #f0f0f050;
+  transition: all ease .5s;
+}
+.difficulty-up:hover {
+  transform: scale(1.1);
+  border-bottom: 8px solid white;
+}
+.difficulty-up:active {
+  transform: scale(.8);
+  opacity: .8
+}
+
+.difficulty-down {
+  margin-bottom: 4px;
+  border-top: 8px solid #f0f0f050;
+  transition: all ease .5s;
+}
+.difficulty-down:hover {
+  transform: scale(1.1);
+  border-top: 8px solid white;
+}
+.difficulty-down:active {
+  transform: scale(.8);
+  opacity: .8
 }
