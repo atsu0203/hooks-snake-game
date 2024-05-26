@@ -109,6 +109,7 @@ function App() {
     setDirection(Direction.up);
     setFields(initFields(fields.length, initialPosition));
   };
+  const onStop = () => setStatus(GameStatus.suspended);
 
   const handleMoving = () => {
     const { x, y } = body[0];
@@ -172,13 +173,18 @@ function App() {
         <div className="title-container">
           <h1 className="title">Snake Game</h1>
         </div>
-        <Navigation />
+        <Navigation length={body.length} />
       </header>
       <main className="main">
         <Field fields={fields} />
       </main>
       <footer className="footer">
-        <Button status={status} onStart={onStart} onRestart={onRestart} />
+        <Button
+          status={status}
+          onStop={onStop}
+          onStart={onStart}
+          onRestart={onRestart}
+        />
         <ManipulationPanel onChange={onChangeDirection} />
       </footer>
     </div>
